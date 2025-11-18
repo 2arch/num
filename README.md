@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pixel Art Game
+
+A minimal pixel art game built with Next.js, featuring grid-based movement, object placement, and interactions.
+
+## Features
+
+- **50x50 Grid World** with camera following
+- **WASD Movement** - Control your character with keyboard
+- **Object Placement** - Click to place stationary or interactable objects
+- **Interaction System** - Press Space to interact with adjacent objects
+- **String-based Architecture** - Clean, minimal codebase
+
+## Controls
+
+- **W/A/S/D** - Move character up/left/down/right
+- **Space** - Interact with adjacent interactable objects
+- **Mouse Click** - Place or remove objects on the grid
+
+## Object Types
+
+- **Stationary** (Brown) - Static objects that cannot be interacted with
+- **Interactable** (Gold) - Objects that change color to red when interacted with
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to play the game.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Architecture
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The game uses a string-based object system:
+- Objects: `{ id: string, type: "stationary" | "interactable", x: number, y: number, color: string }`
+- Character: `{ x: number, y: number }`
+- Camera: `{ offsetX: number, offsetY: number }`
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+All game logic is contained in `app/room.tsx`.
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/2arch/num)
