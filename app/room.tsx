@@ -31,9 +31,6 @@ interface Camera {
 // Grid dimensions
 const GRID_WIDTH = 50;
 const GRID_HEIGHT = 50;
-const TILE_SIZE = 32; // pixels
-const VIEWPORT_WIDTH = 15; // tiles visible
-const VIEWPORT_HEIGHT = 12; // tiles visible
 
 export default function Room() {
   // Game state
@@ -48,17 +45,31 @@ export default function Room() {
   const [camera, setCamera] = useState<Camera>({ offsetX: 0, offsetY: 0 });
   const [selectedTool, setSelectedTool] = useState<ObjectType>("stationary");
   const [objectIdCounter, setObjectIdCounter] = useState(5);
+  const [viewportSize, setViewportSize] = useState({ width: 15, height: 12 });
+
+  // Calculate viewport size based on window dimensions
+  useEffect(() => {
+    const updateViewportSize = () => {
+      const width = Math.floor(window.innerWidth / 32);
+      const height = Math.floor(window.innerHeight / 32);
+      setViewportSize({ width, height });
+    };
+
+    updateViewportSize();
+    window.addEventListener("resize", updateViewportSize);
+    return () => window.removeEventListener("resize", updateViewportSize);
+  }, []);
 
   // Update camera to follow character
   useEffect(() => {
-    const targetOffsetX = character.x - Math.floor(VIEWPORT_WIDTH / 2);
-    const targetOffsetY = character.y - Math.floor(VIEWPORT_HEIGHT / 2);
+    const targetOffsetX = character.x - Math.floor(viewportSize.width / 2);
+    const targetOffsetY = character.y - Math.floor(viewportSize.height / 2);
 
     setCamera({
-      offsetX: Math.max(0, Math.min(targetOffsetX, GRID_WIDTH - VIEWPORT_WIDTH)),
-      offsetY: Math.max(0, Math.min(targetOffsetY, GRID_HEIGHT - VIEWPORT_HEIGHT)),
+      offsetX: Math.max(0, Math.min(targetOffsetX, GRID_WIDTH - viewportSize.width)),
+      offsetY: Math.max(0, Math.min(targetOffsetY, GRID_HEIGHT - viewportSize.height)),
     });
-  }, [character]);
+  }, [character, viewportSize]);
 
   // WASD movement + Space interaction
   const handleKeyDown = useCallback(
@@ -151,8 +162,8 @@ export default function Room() {
   const renderGrid = () => {
     const tiles = [];
 
-    for (let y = camera.offsetY; y < camera.offsetY + VIEWPORT_HEIGHT; y++) {
-      for (let x = camera.offsetX; x < camera.offsetX + VIEWPORT_WIDTH; x++) {
+    for (let y = camera.offsetY; y < camera.offsetY + viewportSize.height; y++) {
+      for (let x = camera.offsetX; x < camera.offsetX + viewportSize.width; x++) {
         if (x >= GRID_WIDTH || y >= GRID_HEIGHT) continue;
 
         const isCharacter = x === character.x && y === character.y;
@@ -164,8 +175,8 @@ export default function Room() {
             onClick={() => handleGridClick(x, y)}
             className="border border-gray-700 cursor-pointer hover:bg-gray-800 transition-colors relative"
             style={{
-              width: TILE_SIZE,
-              height: TILE_SIZE,
+              width: 32,
+              height: 32,
               backgroundColor: obj
                 ? obj.interacted
                   ? "#ff6b6b" // Interacted color
@@ -193,8 +204,8 @@ export default function Room() {
       <div
         className="grid bg-gray-900 absolute inset-0"
         style={{
-          gridTemplateColumns: `repeat(${VIEWPORT_WIDTH}, ${TILE_SIZE}px)`,
-          gridTemplateRows: `repeat(${VIEWPORT_HEIGHT}, ${TILE_SIZE}px)`,
+          gridTemplateColumns: `repeat(${viewportSize.width}, 32px)`,
+          gridTemplateRows: `repeat(${viewportSize.height}, 32px)`,
           imageRendering: "pixelated",
           width: "100vw",
           height: "100vh",
