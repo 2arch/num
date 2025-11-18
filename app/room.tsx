@@ -188,32 +188,31 @@ export default function Room() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black p-8 gap-8">
-      {/* Game title */}
-      <div className="text-white text-2xl font-bold">Pixel Art Game</div>
-
-      {/* Grid viewport */}
+    <div className="relative w-screen h-screen bg-black overflow-hidden">
+      {/* Grid viewport - fullscreen */}
       <div
-        className="grid bg-gray-900 border-4 border-gray-600"
+        className="grid bg-gray-900 absolute inset-0"
         style={{
           gridTemplateColumns: `repeat(${VIEWPORT_WIDTH}, ${TILE_SIZE}px)`,
           gridTemplateRows: `repeat(${VIEWPORT_HEIGHT}, ${TILE_SIZE}px)`,
           imageRendering: "pixelated",
+          width: "100vw",
+          height: "100vh",
         }}
       >
         {renderGrid()}
       </div>
 
-      {/* Controls info */}
-      <div className="text-gray-400 text-sm text-center">
+      {/* Controls info - overlay */}
+      <div className="absolute top-4 left-4 text-gray-400 text-sm bg-black/70 p-2 rounded">
         <div>WASD: Move | Space: Interact | Click: Place/Remove Objects</div>
         <div className="mt-1">
           Position: ({character.x}, {character.y})
         </div>
       </div>
 
-      {/* Toolbar */}
-      <div className="flex gap-4 p-4 bg-gray-800 rounded-lg border-2 border-gray-600">
+      {/* Toolbar - overlay at bottom center */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-4 p-4 bg-gray-800/90 rounded-lg border-2 border-gray-600">
         <button
           onClick={() => setSelectedTool("stationary")}
           className={`px-6 py-3 rounded font-semibold transition-all ${
