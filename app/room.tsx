@@ -173,10 +173,8 @@ export default function Room() {
           <div
             key={`${x}-${y}`}
             onClick={() => handleGridClick(x, y)}
-            className="border border-gray-700 cursor-pointer hover:bg-gray-800 transition-colors relative"
+            className="border border-gray-700 cursor-pointer hover:bg-gray-800 transition-colors relative w-full h-full"
             style={{
-              width: 32,
-              height: 32,
               backgroundColor: obj
                 ? obj.interacted
                   ? "#ff6b6b" // Interacted color
@@ -202,10 +200,10 @@ export default function Room() {
     <div className="relative w-screen h-screen bg-black overflow-hidden">
       {/* Grid viewport - fullscreen */}
       <div
-        className="grid bg-gray-900 absolute inset-0"
+        className="grid bg-gray-900"
         style={{
-          gridTemplateColumns: `repeat(${viewportSize.width}, 32px)`,
-          gridTemplateRows: `repeat(${viewportSize.height}, 32px)`,
+          gridTemplateColumns: `repeat(${viewportSize.width}, 1fr)`,
+          gridTemplateRows: `repeat(${viewportSize.height}, 1fr)`,
           imageRendering: "pixelated",
           width: "100vw",
           height: "100vh",
